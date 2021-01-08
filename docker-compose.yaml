@@ -8,16 +8,16 @@ services:
       - "8000:80"
       - "8443:443"
     volumes:  
-      - "/etc/nginx:/etc/nginx"
+      - "/var/nginx-etc/nginx:/etc/nginx"
       - "/var/run/nginx-sigsci:/var/run"
   sigsci:
     image: ghcr.io/dbca-wa/nginx-sigsci:1.19.6
     volumes:  
-      - "/etc/sigsci:/etc/sigsci"
+      - "/var/nginx-etc/sigsci:/etc/sigsci"
       - "/var/run/nginx-sigsci:/var/run"
   certbot:
     image: certbot/dns-cloudflare
     entrypoint: /etc/letsencrypt/certbot-cron
     volumes:
-      - "/etc/letsencrypt:/etc/letsencrypt"
+      - "/var/nginx-etc/letsencrypt:/etc/letsencrypt"
 

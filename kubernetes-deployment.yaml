@@ -65,7 +65,7 @@ items:
         serviceAccountName: ""
         volumes:
         - hostPath:
-            path: /etc/letsencrypt
+            path: /var/nginx-etc/letsencrypt
           name: certbot-hostpath0
   status: {}
 - apiVersion: apps/v1
@@ -113,7 +113,7 @@ items:
         serviceAccountName: ""
         volumes:
         - hostPath:
-            path: /etc/nginx
+            path: /var/nginx-etc/nginx
           name: nginx-hostpath0
         - hostPath:
             path: /var/run/nginx-sigsci
@@ -161,7 +161,7 @@ items:
         serviceAccountName: ""
         volumes:
         - hostPath:
-            path: /etc/sigsci
+            path: /var/nginx-etc/sigsci
           name: sigsci-hostpath0
         - hostPath:
             path: /var/run/nginx-sigsci
