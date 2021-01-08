@@ -1,0 +1,9 @@
+#!/bin/sh
+# enable job control
+set -m
+# Renew certs twice a day
+while :
+do
+    certbot renew -n --agree-tos || break
+    sleep 12h
+done
