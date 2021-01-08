@@ -1,5 +1,5 @@
 version: "3"
-# Rebuild kubernetes templates/helm chart with kompose -c --volumes hostPath
+# Rebuild kubernetes templates/helm chart with kompose convert -o kubernetes-deployment.yaml --volumes hostPath
 
 services:
   nginx:
