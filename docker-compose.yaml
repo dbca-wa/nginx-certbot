@@ -1,0 +1,12 @@
+version: "3"
+# Rebuild kubernetes templates/helm chart with kompose -c --volumes hostPath
+
+services:
+  nginx:
+    image: ghcr.io/dbca-wa/nginx-sigsci:1.19.6
+    ports:
+      - "8000:80"
+      - "8443:443"
+    volumes:  
+      - "/etc/nginx:/etc/nginx"
+
