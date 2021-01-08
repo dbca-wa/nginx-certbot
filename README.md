@@ -9,7 +9,7 @@ Kubernetes deployment for nginx edge proxies, with certbot renewals and logstash
  - Define configuration git repo and deploy new configs with management script
 
 
-## Updating config
+## Updating deployment spec
 Main definition is docker-compose.yaml. To refresh the kubernetes-deployment.yaml run the following after installing [kompose](https://kompose.io/):
 
 ```
