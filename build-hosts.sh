@@ -3,8 +3,8 @@
 # e.g. ./build-host.sh nginx1.domain nginx2.domain
 for host in "$@"
 do
-    ssh root@$host "curl -sfL https://get.k3s.io | sh -"
+    ssh root@$host "apt -y install docker.io"
     rsync -avr --delete /var/nginx-etc/ root@$host:/var/nginx-etc/
-    ssh root@$host "k3s kubectl apply -f /var/nginx-etc/nginx-certbot-logstash/kubernetes-deployment.yaml"
+    ssh root@$host "docker stack deploy nginx -c /var/nginx-etc/nginx-certbot-logstash/docker-compose.yaml"
 done
 
