@@ -149,7 +149,9 @@ items:
             io.kompose.service: sigsci
         spec:
           containers:
-            - image: ghcr.io/dbca-wa/nginx-sigsci:1.19.6
+            - args:
+                - sigsci-agent
+              image: ghcr.io/dbca-wa/nginx-sigsci:1.19.6
               name: sigsci
               resources: {}
               volumeMounts:

@@ -15,6 +15,7 @@ services:
       - "/var/run/nginx-sigsci:/var/run"
   sigsci:
     image: ghcr.io/dbca-wa/nginx-sigsci:1.19.6
+    command: sigsci-agent
     volumes:  
       - "/var/nginx-etc/sigsci:/etc/sigsci"
       - "/var/run/nginx-sigsci:/var/run"
