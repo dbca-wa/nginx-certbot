@@ -8,6 +8,7 @@ services:
       - "8000:80"
       - "8443:443"
     volumes:  
+      - "/var/nginx-etc/letsencrypt:/etc/letsencrypt"
       - "/var/nginx-etc/nginx:/etc/nginx"
       - "/var/run/nginx-sigsci:/var/run"
   sigsci:
