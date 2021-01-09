@@ -7,6 +7,8 @@ services:
     ports:
       - "8000:80"
       - "8443:443"
+    labels: 
+      kompose.service.type: nodeport
     volumes:  
       - "/var/nginx-etc/letsencrypt:/etc/letsencrypt"
       - "/var/nginx-etc/nginx:/etc/nginx"

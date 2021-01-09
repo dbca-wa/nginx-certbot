@@ -5,6 +5,7 @@ items:
     metadata:
       annotations:
         kompose.cmd: kompose convert -o kubernetes-deployment.yaml --volumes hostPath
+        kompose.service.type: nodeport
         kompose.version: 1.22.0 (955b78124)
       creationTimestamp: null
       labels:
@@ -20,6 +21,7 @@ items:
           targetPort: 443
       selector:
         io.kompose.service: nginx
+      type: NodePort
     status:
       loadBalancer: {}
   - apiVersion: apps/v1
@@ -68,6 +70,7 @@ items:
     metadata:
       annotations:
         kompose.cmd: kompose convert -o kubernetes-deployment.yaml --volumes hostPath
+        kompose.service.type: nodeport
         kompose.version: 1.22.0 (955b78124)
       creationTimestamp: null
       labels:
@@ -84,6 +87,7 @@ items:
         metadata:
           annotations:
             kompose.cmd: kompose convert -o kubernetes-deployment.yaml --volumes hostPath
+            kompose.service.type: nodeport
             kompose.version: 1.22.0 (955b78124)
           creationTimestamp: null
           labels:
