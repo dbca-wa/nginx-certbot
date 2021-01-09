@@ -16,9 +16,11 @@ items:
         - name: "8000"
           port: 8000
           targetPort: 80
+          nodePort: 8000
         - name: "8443"
           port: 8443
           targetPort: 443
+          nodePort: 8443
       selector:
         io.kompose.service: nginx
       type: NodePort
