@@ -4,6 +4,7 @@
 for host in "$@"
 do
     ssh root@$host "apt -y install docker.io"
+    ssh root@$host "docker swarm init"
     rsync -avr --delete /var/nginx-etc/ root@$host:/var/nginx-etc/
     ssh root@$host "docker stack deploy nginx -c /var/nginx-etc/nginx-certbot-logstash/docker-compose.yaml"
 done
