@@ -21,6 +21,7 @@ items:
           port: 443
           targetPort: 443
           nodePort: 30443
+      externalTrafficPolicy: "Local"
       selector:
         io.kompose.service: nginx
       type: NodePort
