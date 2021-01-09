@@ -6,7 +6,7 @@ for host in "$@"
 do
     rsync -avur root@$host:/var/nginx-etc/letsencrypt/ /var/nginx-etc/letsencrypt/ # pull certs back if updated
     rsync -avur /var/nginx-etc/ root@$host:/var/nginx-etc/
-    ssh root@$host "k3s kubectl rollout restart deployment nginx"
+    ssh root@$host reload-nginx
 done
 git commit -am 'pushconfig autocommit' && git push
 popd

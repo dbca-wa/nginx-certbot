@@ -4,8 +4,14 @@ services:
   nginx:
     image: ghcr.io/dbca-wa/nginx-sigsci:1.19.6
     ports:
-      - "80:80"
-      - "443:443"
+      - mode: host
+        protocol: tcp
+        published: 80
+        target: 80
+      - mode: host
+        protocol: tcp
+        published: 443
+        target: 443
     volumes:  
       - "/var/nginx-etc/letsencrypt:/etc/letsencrypt"
       - "/var/nginx-etc/nginx:/etc/nginx"
