@@ -8,7 +8,7 @@ services:
       - "80"
       - "443"
     labels: 
-      kompose.service.type: nodeport
+      kompose.service.type: loadbalancer
     volumes:  
       - "/var/nginx-etc/letsencrypt:/etc/letsencrypt"
       - "/var/nginx-etc/nginx:/etc/nginx"
