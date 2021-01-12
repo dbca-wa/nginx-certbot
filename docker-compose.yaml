@@ -16,6 +16,7 @@ services:
       - "/var/nginx-etc/letsencrypt:/etc/letsencrypt"
       - "/var/nginx-etc/nginx:/etc/nginx"
       - "/var/run/nginx-sigsci:/var/run"
+      - "/var/log/nginx:/var/log/nginx"
   sigsci:
     image: ghcr.io/dbca-wa/nginx-sigsci:1.19.6
     command: sigsci-agent
@@ -27,4 +28,12 @@ services:
     entrypoint: /etc/letsencrypt/certbot-cron
     volumes:
       - "/var/nginx-etc/letsencrypt:/etc/letsencrypt"
+  logstash:
+    image: logstash:7.10.1
+    volumes:
+      - "logstash-data:/var/lib/logstash"
+      - "/var/nginx-etc/logstash:/usr/share/logstash/config"
+      - "/var/log/nginx:/var/log/nginx:ro"
 
+volumes:
+  logstash-data:
