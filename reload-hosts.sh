@@ -8,5 +8,5 @@ do
     rsync -avur /var/nginx-etc/ root@$host:/var/nginx-etc/
     ssh root@$host reload-nginx
 done
-git commit -am 'pushconfig autocommit' && git push
+git commit -am 'pushconfig autocommit'; git push
 popd
