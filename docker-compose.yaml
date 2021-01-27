@@ -16,6 +16,8 @@ services:
       - "/var/nginx-etc/letsencrypt:/etc/letsencrypt"
       - "/var/nginx-etc/nginx:/etc/nginx:ro"
       - "/var/run/nginx-sigsci:/var/run"
+    environment:
+      - "TZ=Australia/Perth"
   sigsci:
     image: ghcr.io/dbca-wa/nginx-sigsci:1.19.6
     command: sigsci-agent
@@ -33,6 +35,7 @@ services:
       - "/var/nginx-etc/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro"
       - "/var/lib/docker/containers:/var/lib/docker/containers:ro"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "/var/log/nginx:/var/log/nginx"
     user: root
     environment:
       - "strict.perms=false"
