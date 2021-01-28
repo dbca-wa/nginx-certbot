@@ -15,7 +15,7 @@ services:
     volumes:
       - "/var/nginx-etc/letsencrypt:/etc/letsencrypt"
       - "/var/nginx-etc/nginx:/etc/nginx:ro"
-      - "/var/run/nginx-sigsci:/var/run"
+      - "nginx-process:/var/run"
     environment:
       - "TZ=Australia/Perth"
   sigsci:
@@ -23,7 +23,7 @@ services:
     command: sigsci-agent
     volumes:
       - "/var/nginx-etc/sigsci:/etc/sigsci"
-      - "/var/run/nginx-sigsci:/var/run"
+      - "nginx-process:/var/run"
   certbot:
     image: certbot/dns-cloudflare
     entrypoint: /etc/letsencrypt/certbot-cron
@@ -39,3 +39,6 @@ services:
     user: root
     environment:
       - "strict.perms=false"
+
+volumes:
+  nginx-process:
