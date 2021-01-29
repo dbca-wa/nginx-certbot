@@ -18,6 +18,11 @@ services:
       - "nginx-process:/var/run"
     environment:
       - "TZ=Australia/Perth"
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: "localhost:24224"
+        tag: "nginx.access"
   sigsci:
     image: ghcr.io/dbca-wa/nginx-sigsci:1.19.6
     command: sigsci-agent
@@ -29,16 +34,24 @@ services:
     entrypoint: /etc/letsencrypt/certbot-cron
     volumes:
       - "/var/nginx-etc/letsencrypt:/etc/letsencrypt"
-  filebeat:
-    image: docker.elastic.co/beats/filebeat:7.10.1
+  #filebeat:
+  #  image: docker.elastic.co/beats/filebeat:7.10.1
+  #  volumes:
+  #    - "/var/nginx-etc/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro"
+  #    - "/var/lib/docker/containers:/var/lib/docker/containers:ro"
+  #    - "/var/run/docker.sock:/var/run/docker.sock:ro"
+  #    - "/var/log/nginx:/var/log/nginx"
+  #  user: root
+  #  environment:
+  #    - "strict.perms=false"
+  fluentd:
+    image: fluentd:v1.9-debian-1
+    ports:
+      - "24224:24224"
     volumes:
-      - "/var/nginx-etc/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro"
-      - "/var/lib/docker/containers:/var/lib/docker/containers:ro"
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "/var/log/nginx:/var/log/nginx"
-    user: root
-    environment:
-      - "strict.perms=false"
+      - "/var/nginx-etc/fluentd:/fluentd/etc"
+      - "fluentd-log:/fluentd/log"
 
 volumes:
   nginx-process:
+  fluentd-log:
