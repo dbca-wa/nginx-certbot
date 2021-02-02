@@ -29,28 +29,24 @@ services:
     volumes:
       - "/var/nginx-etc/sigsci:/etc/sigsci"
       - "nginx-process:/var/run"
+    environment:
+      - "TZ=Australia/Perth"
   certbot:
-    image: certbot/dns-cloudflare
+    image: certbot/dns-cloudflare:v1.11.0
     entrypoint: /etc/letsencrypt/certbot-cron
     volumes:
       - "/var/nginx-etc/letsencrypt:/etc/letsencrypt"
-  #filebeat:
-  #  image: docker.elastic.co/beats/filebeat:7.10.1
-  #  volumes:
-  #    - "/var/nginx-etc/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro"
-  #    - "/var/lib/docker/containers:/var/lib/docker/containers:ro"
-  #    - "/var/run/docker.sock:/var/run/docker.sock:ro"
-  #    - "/var/log/nginx:/var/log/nginx"
-  #  user: root
-  #  environment:
-  #    - "strict.perms=false"
+    environment:
+      - "TZ=Australia/Perth"
   fluentd:
-    image: fluentd:v1.9-debian-1
+    image: fluent/fluentd:v1.12-debian-1
     ports:
       - "24224:24224"
     volumes:
       - "/var/nginx-etc/fluentd:/fluentd/etc"
       - "fluentd-log:/fluentd/log"
+    environment:
+      - "TZ=Australia/Perth"
 
 volumes:
   nginx-process:
