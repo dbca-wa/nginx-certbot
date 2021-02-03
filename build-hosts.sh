@@ -3,7 +3,7 @@
 # e.g. ./build-hosts.sh nginx1.domain nginx2.domain
 for host in "$@"
 do
-    ssh root@$host "apt -y install docker.io=19.03.8-0ubuntu1.20.04.2"
+    ssh root@$host "curl -fsSL https://get.docker.com | sh"
     ssh root@$host "docker swarm init"
     rsync -avr --delete /var/nginx-etc/ root@$host:/var/nginx-etc/
     ssh root@$host "mkdir -p /var/log/nginx"
