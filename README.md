@@ -1,6 +1,6 @@
-# nginx-certbot-filebeat
+# nginx-certbot
 
-Docker Swarm deployment for Nginx edge proxies, with Certbot renewals and Filebeat log shipping.
+Docker Swarm deployment for Nginx edge proxies, with Certbot renewals and log shipping.
 
 ## Usage
 

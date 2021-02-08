@@ -1,5 +1,5 @@
 FROM nginx:1.19.6
-LABEL org.opencontainers.image.source https://github.com/dbca-wa/nginx-certbot-filebeat
+LABEL org.opencontainers.image.source https://github.com/dbca-wa/nginx-certbot
 
 RUN apt-get -y update; apt-get install -y apt-transport-https wget gnupg; \
     wget -qO - https://apt.signalsciences.net/release/gpgkey | apt-key add -; \
