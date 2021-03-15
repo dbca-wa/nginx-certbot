@@ -1,8 +1,8 @@
 #!/bin/bash
-# run with an ssh key configured for root on the target hosts
-# e.g. ./build-hosts.sh nginx1.domain nginx2.domain
+# Example usage: ./build-hosts.sh nginx1.domain nginx2.domain
 for host in "$@"
 do
+    ssh-copy-id -i /root/.ssh/id_rsa -o PreferredAuthentications=password $host
     ssh root@$host "curl -fsSL https://get.docker.com | sh"
     ssh root@$host "docker swarm init"
     rsync -avur /var/nginx-etc/ root@$host:/var/nginx-etc/
