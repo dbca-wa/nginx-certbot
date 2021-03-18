@@ -5,6 +5,7 @@ pushd /var/nginx-etc/nginx
 for host in "$@"
 do
     rsync -avur /var/nginx-etc/ root@$host:/var/nginx-etc/
+    rsync -avur root@$host:/var/nginx-etc/letsencrypt /var/letsencrypt-$host-bak
     ssh root@$host reload-nginx
 done
 git commit -am 'pushconfig autocommit'; git push
