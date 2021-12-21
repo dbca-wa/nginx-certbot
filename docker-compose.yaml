@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   nginx:
-    image: ghcr.io/dbca-wa/nginx-sigsci:1.19.7
+    image: ghcr.io/dbca-wa/nginx-sigsci:1.21.4
     ports:
       - mode: host
         protocol: tcp
@@ -24,7 +24,7 @@ services:
         fluentd-address: "localhost:24224"
         tag: "nginx.access"
   sigsci:
-    image: ghcr.io/dbca-wa/nginx-sigsci:1.19.7
+    image: ghcr.io/dbca-wa/nginx-sigsci:1.21.4
     command: sigsci-agent
     volumes:
       - "/var/nginx-etc/sigsci:/etc/sigsci"
@@ -32,14 +32,14 @@ services:
     environment:
       - "TZ=Australia/Perth"
   certbot:
-    image: certbot/dns-cloudflare:v1.13.0
+    image: certbot/dns-cloudflare:v1.22.0
     entrypoint: /etc/letsencrypt/certbot-cron
     volumes:
       - "/var/nginx-etc/letsencrypt:/etc/letsencrypt"
     environment:
       - "TZ=Australia/Perth"
   fluentd:
-    image: fluent/fluentd:v1.12-debian-1
+    image: fluent/fluentd:v1.14-debian-1
     ports:
       - "24224:24224"
     volumes:
