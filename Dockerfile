@@ -1,4 +1,5 @@
 FROM nginx:1.23.3
+MAINTAINER asi@dbca.wa.gov.au
 LABEL org.opencontainers.image.source https://github.com/dbca-wa/nginx-certbot
 
 RUN apt-get update \

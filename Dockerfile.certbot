@@ -1,0 +1,5 @@
+FROM certbot/dns-cloudflare:v2.3.0
+MAINTAINER asi@dbca.wa.gov.au
+LABEL org.opencontainers.image.source https://github.com/dbca-wa/nginx-certbot
+
+RUN pip install certbot-dns-azure==1.5.0
