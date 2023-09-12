@@ -21,13 +21,15 @@ jobs:
       packages: write
       security-events: write
     steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
       - name: Log into registry ${{ env.REGISTRY }}
         if: github.event_name != 'pull_request'
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -40,10 +42,10 @@ jobs:
           flavor: |
             latest=true
       - name: Build and push Docker image
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           context: .
-          name: Dockerfile.nginx
+          file: Dockerfile.nginx
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
