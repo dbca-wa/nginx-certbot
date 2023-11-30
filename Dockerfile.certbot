@@ -1,5 +1,5 @@
-FROM certbot/dns-cloudflare:v2.6.0
+FROM certbot/dns-cloudflare:v2.7.4
 MAINTAINER asi@dbca.wa.gov.au
 LABEL org.opencontainers.image.source https://github.com/dbca-wa/nginx-certbot
 
-RUN pip install certbot-dns-azure==2.2.0
+RUN pip install certbot-dns-azure==2.4.0
