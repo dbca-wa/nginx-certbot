@@ -1,4 +1,4 @@
-FROM certbot/dns-cloudflare:v2.7.4
+FROM certbot/dns-cloudflare:v2.9.0
 MAINTAINER asi@dbca.wa.gov.au
 LABEL org.opencontainers.image.source https://github.com/dbca-wa/nginx-certbot
 
