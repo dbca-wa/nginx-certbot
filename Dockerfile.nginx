@@ -1,12 +1,13 @@
-FROM nginx:1.24.0
+FROM nginx:1.24
 MAINTAINER asi@dbca.wa.gov.au
 LABEL org.opencontainers.image.source https://github.com/dbca-wa/nginx-certbot
 
+# Reference: https://docs.fastly.com/en/ngwaf/debian-nginx-1.14.1higher
 RUN apt-get update \
   && apt-get upgrade -y \
   && apt-get install -y apt-transport-https wget gnupg \
-  && wget -qO - https://apt.signalsciences.net/release/gpgkey | apt-key add - \
-  && echo "deb https://apt.signalsciences.net/release/debian/ bullseye main" >> /etc/apt/sources.list.d/sigsci-release.list \
+  && wget -qO - https://apt.signalsciences.net/release/gpgkey | gpg --dearmor -o /usr/share/keyrings/sigsci.gpg \
+  && echo "deb [signed-by=/usr/share/keyrings/sigsci.gpg] https://apt.signalsciences.net/release/debian/ bullseye main" | tee /etc/apt/sources.list.d/sigsci-release.list \
   && apt-get update \
-  && apt-get -y install nginx-module-sigsci-nxo=1.24.0* sigsci-agent \
+  && apt-get -y install nginx-module-sigsci-nxo=1.24* sigsci-agent \
   && rm -rf /var/lib/apt/lists
