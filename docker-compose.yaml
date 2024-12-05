@@ -1,6 +1,6 @@
 services:
   nginx:
-    image: ghcr.io/dbca-wa/nginx-sigsci:1.26.1
+    image: ghcr.io/dbca-wa/nginx-sigsci:1.26.2
     ports:
       - mode: host
         protocol: tcp
@@ -14,7 +14,6 @@ services:
       - "/var/nginx-etc/letsencrypt:/etc/letsencrypt"
       - "/var/nginx-etc/nginx:/etc/nginx:ro"
       - "nginx-process:/var/run"
-      - "nginx-error-logs:/var/log/nginx/errors"
     environment:
       - "TZ=Australia/Perth"
     logging:
@@ -23,7 +22,7 @@ services:
         fluentd-address: "localhost:24224"
         tag: "nginx.access"
   sigsci:
-    image: ghcr.io/dbca-wa/nginx-sigsci:1.26.1
+    image: ghcr.io/dbca-wa/nginx-sigsci:1.26.2
     command: sigsci-agent
     volumes:
       - "/var/nginx-etc/sigsci:/etc/sigsci"
@@ -31,7 +30,7 @@ services:
     environment:
       - "TZ=Australia/Perth"
   certbot:
-    image: ghcr.io/dbca-wa/certbot-dns-cloudflare-azure:2.11.0
+    image: ghcr.io/dbca-wa/certbot-dns-cloudflare-azure:3.0.1
     entrypoint: /etc/letsencrypt/certbot-entrypoint
     volumes:
       - "/var/nginx-etc/letsencrypt:/etc/letsencrypt"
@@ -39,7 +38,7 @@ services:
     environment:
       - "TZ=Australia/Perth"
   fluentd:
-    image: fluentd:v1.16-debian-1
+    image: fluentd:v1.18-debian-1
     ports:
       - "24224:24224"
     volumes:
@@ -50,6 +49,5 @@ services:
 
 volumes:
   nginx-process:
-  nginx-error-logs:
   fluentd-log:
   letsencrypt-log:
