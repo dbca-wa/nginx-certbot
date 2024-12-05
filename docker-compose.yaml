@@ -14,6 +14,7 @@ services:
       - "/var/nginx-etc/letsencrypt:/etc/letsencrypt"
       - "/var/nginx-etc/nginx:/etc/nginx:ro"
       - "nginx-process:/var/run"
+      - "nginx-error-logs:/var/log/nginx/errors"
     environment:
       - "TZ=Australia/Perth"
     logging:
@@ -49,5 +50,6 @@ services:
 
 volumes:
   nginx-process:
+  nginx-error-logs:
   fluentd-log:
   letsencrypt-log:
