@@ -11,7 +11,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: nginx-sigsci
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   build:
@@ -63,7 +63,7 @@ jobs:
           context: .
           file: Dockerfile.nginx
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ghcr.io/dbca-wa/nginx-sigsci:latest
           labels: ${{ steps.meta.outputs.labels }}
   scan:
     name: Image vulnerability scan
