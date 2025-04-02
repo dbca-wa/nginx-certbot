@@ -11,13 +11,13 @@ services:
         published: 443
         target: 443
     volumes:
-      - "/var/nginx-etc/letsencrypt:/etc/letsencrypt"
-      - "/var/nginx-etc/nginx:/etc/nginx:ro"
-      - "nginx-process:/var/run"
+      - /var/nginx-etc/letsencrypt:/etc/letsencrypt
+      - /var/nginx-etc/nginx:/etc/nginx:ro
+      - nginx-process:/var/run
     environment:
-      - "TZ=Australia/Perth"
+      - TZ=Australia/Perth
     logging:
-      driver: "fluentd"
+      driver: fluentd
       options:
         fluentd-address: "localhost:24224"
         tag: "nginx.access"
@@ -25,27 +25,37 @@ services:
     image: ghcr.io/dbca-wa/nginx-sigsci:1.26.2-4.62.0
     command: sigsci-agent
     volumes:
-      - "/var/nginx-etc/sigsci:/etc/sigsci"
-      - "nginx-process:/var/run"
+      - /var/nginx-etc/sigsci:/etc/sigsci
+      - nginx-process:/var/run
     environment:
-      - "TZ=Australia/Perth"
+      - TZ=Australia/Perth
   certbot:
     image: ghcr.io/dbca-wa/certbot-dns-cloudflare-azure:3.1.0
     entrypoint: /etc/letsencrypt/certbot-entrypoint
     volumes:
-      - "/var/nginx-etc/letsencrypt:/etc/letsencrypt"
-      - "letsencrypt-log:/var/log/letsencrypt"
+      - /var/nginx-etc/letsencrypt:/etc/letsencrypt
+      - letsencrypt-log:/var/log/letsencrypt
     environment:
-      - "TZ=Australia/Perth"
+      - TZ=Australia/Perth
   fluentd:
     image: fluentd:v1.18-debian-1
     ports:
-      - "24224:24224"
+      - 24224:24224
     volumes:
-      - "/var/nginx-etc/fluentd:/fluentd/etc"
-      - "fluentd-log:/fluentd/log"
+      - /var/nginx-etc/fluentd:/fluentd/etc
+      - fluentd-log:/fluentd/log
     environment:
-      - "TZ=Australia/Perth"
+      - TZ=Australia/Perth
+  log-shipper:
+    image: mcr.microsoft.com/azure-cli
+    volumes:
+      - fluentd-log:/fluentd/log:ro
+    environment:
+      - TZ=Australia/Perth
+    env_file: .env.log-shipper
+    # Required .env.log-shipper values: HOSTNAME, AZURE_STORAGE_CONNECTION_STRING
+    entrypoint: /bin/bash -c
+    command: ['while true; do az storage blob upload-batch --connection-string $$AZURE_STORAGE_CONNECTION_STRING --destination access-logs-json/$$HOSTNAME --source /fluentd/log --pattern "*.json" --no-progress --only-show-errors --overwrite false --validate-content; sleep 3600; done']
 
 volumes:
   nginx-process:
