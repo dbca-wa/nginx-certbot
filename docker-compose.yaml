@@ -55,7 +55,7 @@ services:
     env_file: .env.log-shipper
     # Required .env.log-shipper values: HOSTNAME, AZURE_STORAGE_CONNECTION_STRING
     entrypoint: /bin/bash -c
-    command: ['while true; do az storage blob upload-batch --connection-string $$AZURE_STORAGE_CONNECTION_STRING --destination access-logs-json/$$HOSTNAME --source /fluentd/log --pattern "*.json" --no-progress --only-show-errors --overwrite false --validate-content; sleep 3600; done']
+    command: ['while true; do az storage blob upload-batch --connection-string $$AZURE_STORAGE_CONNECTION_STRING --destination access-logs-json/$$HOSTNAME --source /fluentd/log --pattern "*.json" --no-progress --only-show-errors --overwrite false --validate-content; sleep 300; done']
 
 volumes:
   nginx-process:
