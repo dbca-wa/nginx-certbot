@@ -1,21 +1,17 @@
 # syntax=docker/dockerfile:1
-FROM nginx:1.26.2
+FROM nginx:1.28.0
 LABEL org.opencontainers.image.authors="asi@dbca.wa.gov.au"
 LABEL org.opencontainers.image.source="https://github.com/dbca-wa/nginx-certbot"
 
 # Install the Signal Sciences agent and the Nginx dynamic module for the version of Nginx in use.
-# References:
+# Add the Signal Sciences package repository.
 # https://docs.fastly.com/en/ngwaf/installing-the-agent-on-debian#debian-11---bullseye
-# https://docs.fastly.com/en/ngwaf/installing-the-nginx-dynamic-module#installing-the-nginx-dynamic-module-for-nginx-open-source
-
 RUN apt-get update \
-  # First, upgrade any system packages.
-  && apt-get upgrade -y \
   && apt-get install -y apt-transport-https wget gnupg \
-  # Next, add the Signal Sciences package repository.
   && wget -qO - https://apt.signalsciences.net/release/gpgkey | gpg --dearmor -o /usr/share/keyrings/sigsci.gpg \
   && echo "deb [signed-by=/usr/share/keyrings/sigsci.gpg] https://apt.signalsciences.net/release/debian/ bullseye main" | tee /etc/apt/sources.list.d/sigsci-release.list \
   && apt-get update
-# Finally, install the Signal Sciences agent and the Nginx module.
-RUN apt-get -y install sigsci-agent nginx-module-sigsci-nxo=1.26.2* \
+# Install the Signal Sciences agent and the Nginx module.
+# https://docs.fastly.com/en/ngwaf/installing-the-nginx-dynamic-module#installing-the-nginx-dynamic-module-for-nginx-open-source
+RUN apt-get -y install sigsci-agent nginx-module-fastly-nxs=1.28.0* \
   && rm -rf /var/lib/apt/lists
