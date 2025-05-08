@@ -1,6 +1,6 @@
 services:
   nginx:
-    image: ghcr.io/dbca-wa/nginx-sigsci:1.26.2-4.62.0
+    image: ghcr.io/dbca-wa/nginx-sigsci:1.28.0
     ports:
       - mode: host
         protocol: tcp
@@ -19,10 +19,10 @@ services:
     logging:
       driver: fluentd
       options:
-        fluentd-address: "localhost:24224"
-        tag: "nginx.access"
+        fluentd-address: 'localhost:24224'
+        tag: 'nginx.access'
   sigsci:
-    image: ghcr.io/dbca-wa/nginx-sigsci:1.26.2-4.62.0
+    image: ghcr.io/dbca-wa/nginx-sigsci:1.28.0
     command: sigsci-agent
     volumes:
       - /var/nginx-etc/sigsci:/etc/sigsci
@@ -30,7 +30,7 @@ services:
     environment:
       - TZ=Australia/Perth
   certbot:
-    image: ghcr.io/dbca-wa/certbot-dns-cloudflare-azure:3.3.0
+    image: ghcr.io/dbca-wa/certbot-dns-cloudflare-azure:4.0.0
     entrypoint: /etc/letsencrypt/certbot-entrypoint
     volumes:
       - /var/nginx-etc/letsencrypt:/etc/letsencrypt
@@ -47,7 +47,7 @@ services:
     environment:
       - TZ=Australia/Perth
   log-shipper:
-    image: mcr.microsoft.com/azure-cli
+    image: mcr.microsoft.com/azure-cli:2.72.0
     volumes:
       - fluentd-log:/fluentd/log:ro
     environment:
@@ -55,7 +55,10 @@ services:
     env_file: .env.log-shipper
     # Required .env.log-shipper values: HOSTNAME, AZURE_STORAGE_CONNECTION_STRING
     entrypoint: /bin/bash -c
-    command: ['while true; do az storage blob upload-batch --connection-string $$AZURE_STORAGE_CONNECTION_STRING --destination access-logs-json/$$HOSTNAME --source /fluentd/log --pattern "*.json" --no-progress --only-show-errors --overwrite false --validate-content; sleep 300; done']
+    command:
+      [
+        'while true; do az storage blob upload-batch --connection-string $$AZURE_STORAGE_CONNECTION_STRING --destination access-logs-json/$$HOSTNAME --source /fluentd/log --pattern "*.json" --no-progress --only-show-errors --overwrite false --validate-content; sleep 300; done',
+      ]
 
 volumes:
   nginx-process:
