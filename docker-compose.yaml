@@ -10,8 +10,12 @@ services:
         protocol: tcp
         published: 443
         target: 443
+      - mode: host
+        protocol: tcp
+        published: 10246
+        target: 10246
     healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:10254/healthz']
+      test: ['CMD', 'curl', '-f', 'http://localhost:10246/healthz']
       start_period: 10s
       interval: 5s
       timeout: 1s
