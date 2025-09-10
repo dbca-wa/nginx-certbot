@@ -49,7 +49,7 @@ services:
     environment:
       - TZ=Australia/Perth
   fluentd:
-    image: fluentd:v1.18-debian-1
+    image: fluentd:v1.19-debian-1
     ports:
       - 24224:24224
     volumes:
@@ -58,7 +58,7 @@ services:
     environment:
       - TZ=Australia/Perth
   log-shipper:
-    image: mcr.microsoft.com/azure-cli:2.72.0
+    image: mcr.microsoft.com/azure-cli:2.77.0
     volumes:
       - fluentd-log:/fluentd/log:ro
     environment:
