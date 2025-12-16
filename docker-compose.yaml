@@ -41,7 +41,7 @@ services:
     environment:
       - TZ=Australia/Perth
   certbot:
-    image: ghcr.io/dbca-wa/certbot-dns-cloudflare-azure:4.0.0
+    image: ghcr.io/dbca-wa/certbot-dns-cloudflare-azure:5.2.1
     entrypoint: /etc/letsencrypt/certbot-entrypoint
     volumes:
       - /var/nginx-etc/letsencrypt:/etc/letsencrypt
