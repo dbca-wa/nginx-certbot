@@ -58,7 +58,7 @@ services:
     environment:
       - TZ=Australia/Perth
   log-shipper:
-    image: mcr.microsoft.com/azure-cli:2.77.0
+    image: mcr.microsoft.com/azure-cli:2.81.0
     volumes:
       - fluentd-log:/fluentd/log:ro
     environment:
