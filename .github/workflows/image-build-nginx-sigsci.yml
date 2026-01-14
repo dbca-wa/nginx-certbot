@@ -1,4 +1,4 @@
-name: 'Build Certbot Docker image'
+name: 'Build Nginx + WAF agent Docker image'
 
 on:
   push:
@@ -11,7 +11,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository_owner }}/certbot-dns-cloudflare-azure
+  IMAGE_NAME: ${{ github.repository_owner }}/nginx-sigsci
 
 jobs:
   build:
@@ -42,12 +42,10 @@ jobs:
     # For linux/amd64, it runs on the latest Ubuntu runner.
     # For linux/arm64, it runs on an Ubuntu 24.04 ARM runner.
     runs-on: ${{ matrix.platform == 'linux/amd64' && 'ubuntu-latest' || matrix.platform == 'linux/arm64' && 'ubuntu-24.04-arm' }}
-    name: Build Certbot image for ${{ matrix.platform }}
+    name: Build Nginx+WAF agent image for ${{ matrix.platform }}
     steps:
       #----------------------------------------------
       # This step sets up the environment for the current platform being built.
-      # It replaces the '/' character in the platform name with '-' and sets it as an environment variable.
-      # This is useful for naming artifacts and other resources that cannot contain '/'.
       # The environment variable PLATFORMS_PAIR will be used later in the workflow.
       #----------------------------------------------
       - name: Prepare environment for current platform
@@ -119,7 +117,7 @@ jobs:
           DOCKER_BUILDKIT: 1
         with:
           context: .
-          file: Dockerfile.certbot
+          file: Dockerfile.nginx
           platforms: ${{ matrix.platform }}
           labels: ${{ steps.meta.outputs.labels }}
           annotations: ${{ steps.meta.outputs.annotations }}
