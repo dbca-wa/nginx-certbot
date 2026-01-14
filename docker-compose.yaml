@@ -1,6 +1,6 @@
 services:
   nginx:
-    image: ghcr.io/dbca-wa/nginx-sigsci:1.28.0
+    image: ghcr.io/dbca-wa/nginx-sigsci
     ports:
       - mode: host
         protocol: tcp
@@ -22,7 +22,8 @@ services:
         fluentd-address: 'localhost:24224'
         tag: 'nginx.access'
   sigsci:
-    image: ghcr.io/dbca-wa/nginx-sigsci:1.28.0
+    image: ghcr.io/dbca-wa/nginx-sigsci
+    # https://docs.fastly.com/en/ngwaf/installing-the-agent#start-the-agent
     command: sigsci-agent
     volumes:
       - /var/nginx-etc/sigsci:/etc/sigsci
@@ -30,7 +31,7 @@ services:
     environment:
       - TZ=Australia/Perth
   certbot:
-    image: ghcr.io/dbca-wa/certbot-dns-cloudflare-azure:4.0.0
+    image: ghcr.io/dbca-wa/certbot-dns-cloudflare-azure:5.2.2
     entrypoint: /etc/letsencrypt/certbot-entrypoint
     volumes:
       - /var/nginx-etc/letsencrypt:/etc/letsencrypt
