@@ -1,6 +1,9 @@
 name: 'Build Nginx + WAF agent Docker image'
 
 on:
+  schedule:
+    # 0513 AWST, Mon-Fri
+    - cron: '13 21 * * 1-5'
   push:
     # Publish `main` as `latest` image.
     branches: [main]
@@ -193,8 +196,13 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           annotations: |
             type=org.opencontainers.image.description,value=${{ github.event.repository.description || 'No description provided' }}
+          # Image tag will be 'latest' for the main or dev branches,
+          # or else will match the Git tag (semver).
+          # https://github.com/docker/metadata-action?tab=readme-ov-file#typesemver
           tags: |
+            type=ref,event=pr,value=latest
             type=raw,value=latest,enable=${{ github.ref_name == 'main' }}
+            type=raw,value=latest,enable=${{ github.ref_name == 'dev' }}
             type=semver,pattern={{version}}
 
       #----------------------------------------------

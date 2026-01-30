@@ -1,6 +1,6 @@
 services:
   nginx:
-    image: ghcr.io/dbca-wa/nginx-sigsci:1.28.0
+    image: ghcr.io/dbca-wa/nginx-sigsci:1.28.1
     ports:
       - mode: host
         protocol: tcp
@@ -10,6 +10,17 @@ services:
         protocol: tcp
         published: 443
         target: 443
+      - mode: host
+        protocol: tcp
+        published: 10246
+        target: 10246
+    # Healthcheck relies on Nginx configuration for endpoint.
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:10246/healthz']
+      start_period: 10s
+      interval: 5s
+      timeout: 1s
+      retries: 5
     volumes:
       - /var/nginx-etc/letsencrypt:/etc/letsencrypt
       - /var/nginx-etc/nginx:/etc/nginx:ro
@@ -22,7 +33,8 @@ services:
         fluentd-address: 'localhost:24224'
         tag: 'nginx.access'
   sigsci:
-    image: ghcr.io/dbca-wa/nginx-sigsci:1.28.0
+    image: ghcr.io/dbca-wa/nginx-sigsci:1.28.1
+    # https://docs.fastly.com/en/ngwaf/installing-the-agent#start-the-agent
     command: sigsci-agent
     volumes:
       - /var/nginx-etc/sigsci:/etc/sigsci
@@ -30,7 +42,7 @@ services:
     environment:
       - TZ=Australia/Perth
   certbot:
-    image: ghcr.io/dbca-wa/certbot-dns-cloudflare-azure:4.0.0
+    image: ghcr.io/dbca-wa/certbot-dns-cloudflare-azure:5.2.2
     entrypoint: /etc/letsencrypt/certbot-entrypoint
     volumes:
       - /var/nginx-etc/letsencrypt:/etc/letsencrypt
