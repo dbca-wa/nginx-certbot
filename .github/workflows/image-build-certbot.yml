@@ -1,6 +1,9 @@
 name: 'Build Certbot Docker image'
 
 on:
+  schedule:
+    # 0513 AWST, Mon-Fri
+    - cron: '13 21 * * 1-5'
   push:
     # Publish `main` as `latest` image.
     branches: [main]
