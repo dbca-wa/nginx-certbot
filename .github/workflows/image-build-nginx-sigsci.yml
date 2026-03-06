@@ -94,7 +94,7 @@ jobs:
       # Set up Docker Buildx, which is a Docker CLI plugin for extended build capabilities with BuildKit.
       #----------------------------------------------
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
         with:
           endpoint: builders
           platforms: ${{ matrix.platform }}
@@ -209,7 +209,7 @@ jobs:
       # Set up Docker Buildx.
       #----------------------------------------------
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
         with:
           driver-opts: |
             network=host
