@@ -204,7 +204,6 @@ jobs:
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
             type=raw,value=dev,enable=${{ github.ref_name == 'dev' }}
-            type=semver,pattern={{version}}
 
       #----------------------------------------------
       # Set up Docker Buildx.
