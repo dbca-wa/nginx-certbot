@@ -41,6 +41,12 @@ services:
       - nginx-process:/var/run
     environment:
       - TZ=Australia/Perth
+    healthcheck:
+      test: ['CMD', 'sigsci-agent', '--usage']
+      start_period: 5s
+      interval: 5s
+      timeout: 1s
+      retries: 3
   certbot:
     image: ghcr.io/dbca-wa/certbot-dns-multi:5.5.0
     entrypoint: /etc/letsencrypt/certbot-entrypoint
@@ -49,6 +55,12 @@ services:
       - letsencrypt-log:/var/log/letsencrypt
     environment:
       - TZ=Australia/Perth
+    healthcheck:
+      test: ['CMD', 'certbot', 'certificates']
+      start_period: 5s
+      interval: 5s
+      timeout: 1s
+      retries: 3
   fluentd:
     image: fluentd:v1.19-debian-1
     ports:
@@ -58,6 +70,12 @@ services:
       - fluentd-log:/fluentd/log
     environment:
       - TZ=Australia/Perth
+    healthcheck:
+      test: ['CMD', 'fluentd', '--dry-run', '-c', '/fluentd/etc/fluent.conf']
+      start_period: 5s
+      interval: 5s
+      timeout: 1s
+      retries: 3
   log-shipper:
     image: mcr.microsoft.com/azure-cli:2.85.0
     volumes:
