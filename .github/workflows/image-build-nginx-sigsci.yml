@@ -61,7 +61,7 @@ jobs:
       # Make use of the Step Security Harden Runner workflow to monitor the build process.
       #----------------------------------------------
       - name: Harden the GitHub runner
-        uses: step-security/harden-runner@v2.16.0
+        uses: step-security/harden-runner@v2.19.0
         with:
           egress-policy: audit
 
@@ -78,7 +78,7 @@ jobs:
       #----------------------------------------------
       - name: Extract Docker metadata
         id: meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
@@ -191,7 +191,7 @@ jobs:
       #----------------------------------------------
       - name: Docker meta
         id: meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           annotations: |
@@ -200,9 +200,8 @@ jobs:
           # or else will match the Git tag (semver).
           # https://github.com/docker/metadata-action?tab=readme-ov-file#typesemver
           tags: |
-            type=ref,event=pr,value=latest
-            type=raw,value=latest,enable=${{ github.ref_name == 'main' }}
-            type=raw,value=latest,enable=${{ github.ref_name == 'dev' }}
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=dev,enable=${{ github.ref_name == 'dev' }}
             type=semver,pattern={{version}}
 
       #----------------------------------------------
