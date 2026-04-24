@@ -7,7 +7,7 @@ Docker Swarm deployment for Nginx + WAF agent edge proxies, with Certbot renewal
 Tested on Ubuntu 22.04. This project is used to build and deploy a Docker Swarm stack
 intended to be used in conjunction with the department's Nginx and LetsEncrypt configuration.
 
-A sample script (`build-host.sh`) is included which assumes that you have a `/var/nginx-etc` directory set up
+A sample script (`scripts/build-host.sh`) is included which assumes that you have a `/var/nginx-etc` directory set up
 with your config directories, ready for deployment.
 
 ## Upgrading
