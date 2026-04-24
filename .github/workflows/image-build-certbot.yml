@@ -5,12 +5,12 @@ on:
     # 0513 AWST, Mon-Fri
     - cron: '13 21 * * 1-5'
   push:
-    # Publish `main` as `latest` image.
-    branches: [main]
-    # Publish tags as releases.
-    tags: ['*']
-  pull_request:
-    branches: [main]
+    branches:
+      - main
+      - dev
+    tags:
+      - '*'
+  workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
