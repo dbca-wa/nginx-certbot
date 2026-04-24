@@ -146,7 +146,7 @@ jobs:
       # The artifact is retained for 1 day, and if no files are found, it will throw an error.
       #----------------------------------------------
       - name: Upload digest
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: digests-${{ env.PLATFORM_PAIR }}
           path: /tmp/digests/*
