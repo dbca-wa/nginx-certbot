@@ -1,6 +1,6 @@
 services:
   nginx:
-    image: ghcr.io/dbca-wa/nginx-sigsci:1.28.2
+    image: ghcr.io/dbca-wa/nginx-sigsci:1.30.0
     ports:
       - mode: host
         protocol: tcp
@@ -16,7 +16,7 @@ services:
         target: 10246
     # Healthcheck relies on Nginx configuration for endpoint.
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:10246/healthz"]
+      test: ['CMD', 'curl', '-f', 'http://localhost:10246/healthz']
       start_period: 10s
       interval: 5s
       timeout: 1s
@@ -30,10 +30,10 @@ services:
     logging:
       driver: fluentd
       options:
-        fluentd-address: "localhost:24224"
-        tag: "nginx.access"
+        fluentd-address: 'localhost:24224'
+        tag: 'nginx.access'
   sigsci:
-    image: ghcr.io/dbca-wa/nginx-sigsci:1.28.2
+    image: ghcr.io/dbca-wa/nginx-sigsci:1.30.0
     # https://docs.fastly.com/en/ngwaf/installing-the-agent#start-the-agent
     command: sigsci-agent --log-out=stdout
     volumes:
@@ -42,7 +42,7 @@ services:
     environment:
       - TZ=Australia/Perth
   certbot:
-    image: ghcr.io/dbca-wa/certbot-dns-cloudflare-azure:5.2.2
+    image: ghcr.io/dbca-wa/certbot-dns-cloudflare-azure:5.5.5
     entrypoint: /etc/letsencrypt/certbot-entrypoint
     volumes:
       - /var/nginx-etc/letsencrypt:/etc/letsencrypt
@@ -59,7 +59,7 @@ services:
     environment:
       - TZ=Australia/Perth
   log-shipper:
-    image: mcr.microsoft.com/azure-cli:2.72.0
+    image: mcr.microsoft.com/azure-cli:2.85.0
     volumes:
       - fluentd-log:/fluentd/log:ro
     environment:
