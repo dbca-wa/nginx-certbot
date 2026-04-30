@@ -1,6 +1,0 @@
-# syntax=docker/dockerfile:1
-FROM certbot/dns-cloudflare:v5.5.0
-LABEL org.opencontainers.image.authors="asi@dbca.wa.gov.au"
-LABEL org.opencontainers.image.source="https://github.com/dbca-wa/nginx-certbot"
-
-RUN pip install --no-cache-dir certbot-dns-azure==2.6.1 azure-mgmt-dns==8.2.0
