@@ -16,11 +16,11 @@ services:
         target: 10246
     # Healthcheck relies on Nginx configuration for endpoint.
     healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:10246/healthz']
-      start_period: 10s
+      test: ['CMD', 'curl', '--fail', '--silent', '--show-error', 'http://127.0.0.1:10246/healthz']
+      start_period: 5s
       interval: 5s
       timeout: 1s
-      retries: 5
+      retries: 3
     volumes:
       - /var/nginx-etc/letsencrypt:/etc/letsencrypt
       - /var/nginx-etc/nginx:/etc/nginx:ro
@@ -67,15 +67,15 @@ services:
     ports:
       - 24224:24224
     volumes:
-      - /var/nginx-etc/fluentd:/fluentd/etc
+      - /var/nginx-etc/fluentd:/fluentd/etc:ro
       - fluentd-log:/fluentd/log
     environment:
       - TZ=Australia/Perth
     healthcheck:
-      test: ['CMD', 'fluentd', '--dry-run', '-c', '/fluentd/etc/fluent.conf']
+      test: ['CMD', 'fluentd', '--dry-run', '--quiet', '-c', '/fluentd/etc/fluent.conf']
       start_period: 5s
-      interval: 5s
-      timeout: 1s
+      interval: 15s
+      timeout: 5s
       retries: 3
   log-shipper:
     image: mcr.microsoft.com/azure-cli:2.85.0
