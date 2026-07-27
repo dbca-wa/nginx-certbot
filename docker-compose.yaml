@@ -47,21 +47,40 @@ services:
       interval: 5s
       timeout: 1s
       retries: 3
-  certbot:
-    #image: ghcr.io/dbca-wa/certbot-dns-multi:5.5.0
-    image: ghcr.io/dbca-wa/certbot-dns-cloudflare-azure:4.0.0
-    entrypoint: /etc/letsencrypt/certbot-entrypoint
+  certbot-cloudflare:
+    image: ghcr.io/dbca-wa/certbot-dns-multi
     volumes:
       - /var/nginx-etc/letsencrypt:/etc/letsencrypt
+      - /var/nginx-etc/letsencrypt/secrets/cloudflare.ini:/secrets/multi.ini
       - letsencrypt-log:/var/log/letsencrypt
     environment:
       - TZ=Australia/Perth
+      - EMAIL=asi@dbca.wa.gov.au
+      - DOMAINS=dbca.wa.gov.au,*.dbca.wa.gov.au,aspectsofkingspark.com.au,*.aspectsofkingspark.com.au,conservation.wa.gov.au,*.conservation.wa.gov.au,gorgon-ncb.org.au,*.gorgon-ncb.org.au,lan.fyi,*.lan.fyi,perthzoo.wa.gov.au,*.perthzoo.wa.gov.au,bgpa.wa.gov.au,*.bgpa.wa.gov.au,dpaw.wa.gov.au,*.dpaw.wa.gov.au,perthzoo.com.au,*.perthzoo.com.au,*.bdr.wa.gov.au,*.bio.wa.gov.au,bdr.wa.gov.au,bio.wa.gov.au,*.kingsparkguides.org.au,kingsparkguides.org.au
     healthcheck:
       test: ['CMD', 'certbot', '--help']
       start_period: 5s
       interval: 5s
       timeout: 1s
       retries: 3
+    entrypoint: ["tail", "-f", "/dev/null"]
+  certbot-azure:
+    image: ghcr.io/dbca-wa/certbot-dns-multi
+    volumes:
+      - /var/nginx-etc/letsencrypt:/etc/letsencrypt
+      - /var/nginx-etc/letsencrypt/secrets/azure.ini:/secrets/azure.ini
+      - letsencrypt-log:/var/log/letsencrypt
+    environment:
+      - TZ=Australia/Perth
+      - EMAIL=asi@dbca.wa.gov.au
+      - DOMAINS=rottnestisland.com,*.rottnestisland.com
+    healthcheck:
+      test: ['CMD', 'certbot', '--help']
+      start_period: 5s
+      interval: 5s
+      timeout: 1s
+      retries: 3
+    entrypoint: ["tail", "-f", "/dev/null"]
   fluentd:
     image: fluentd:v1.19-debian-1
     ports:
