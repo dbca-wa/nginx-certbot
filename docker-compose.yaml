@@ -74,7 +74,7 @@ services:
     volumes:
       - /var/nginx-etc/fluentd:/fluentd/etc:ro
       - fluentd-log:/fluentd/log
-      - /var/run:/var/run
+      - /var/run/fluentd:/var/run/fluentd
     environment:
       - TZ=Australia/Perth
     healthcheck:
