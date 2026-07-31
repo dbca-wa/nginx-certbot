@@ -49,7 +49,7 @@ services:
       interval: 5s
       timeout: 1s
       retries: 3
-    certbot:
+  certbot:
     #image: ghcr.io/dbca-wa/certbot-dns-multi:5.5.0
     image: ghcr.io/dbca-wa/certbot-dns-cloudflare-azure:4.0.0
     entrypoint: /etc/letsencrypt/certbot-entrypoint
