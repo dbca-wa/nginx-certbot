@@ -78,7 +78,7 @@ services:
     environment:
       - TZ=Australia/Perth
     healthcheck:
-      test: ['CMD', 'fluentd', '--dry-run', '-c', '/fluentd/etc/fluentd.conf']
+      test: ['CMD', 'fluentd', '--dry-run', '-c', '/fluentd/etc/fluent.conf']
       start_period: 5s
       interval: 5s
       timeout: 1s
