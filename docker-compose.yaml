@@ -25,12 +25,14 @@ services:
       - /var/nginx-etc/letsencrypt:/etc/letsencrypt
       - /var/nginx-etc/nginx:/etc/nginx:ro
       - nginx-process:/var/run
+      - /var/run/fluentd:/var/run/fluentd
     environment:
       - TZ=Australia/Perth
     logging:
       driver: fluentd
       options:
-        fluentd-address: 'localhost:24224'
+        fluentd-address: 'unix:///var/run/fluentd/fluentd.sock'
+        mode: 'non-blocking'
         tag: 'nginx.access'
   sigsci:
     image: ghcr.io/dbca-wa/nginx-sigsci:1.30.4
@@ -47,51 +49,36 @@ services:
       interval: 5s
       timeout: 1s
       retries: 3
-  certbot-cloudflare:
-    image: ghcr.io/dbca-wa/certbot-dns-multi
+    certbot:
+    #image: ghcr.io/dbca-wa/certbot-dns-multi:5.5.0
+    image: ghcr.io/dbca-wa/certbot-dns-cloudflare-azure:4.0.0
+    entrypoint: /etc/letsencrypt/certbot-entrypoint
     volumes:
       - /var/nginx-etc/letsencrypt:/etc/letsencrypt
-      - /var/nginx-etc/letsencrypt/secrets/cloudflare.ini:/secrets/multi.ini
       - letsencrypt-log:/var/log/letsencrypt
     environment:
       - TZ=Australia/Perth
-      - EMAIL=asi@dbca.wa.gov.au
-      - DOMAINS=dbca.wa.gov.au,*.dbca.wa.gov.au,aspectsofkingspark.com.au,*.aspectsofkingspark.com.au,conservation.wa.gov.au,*.conservation.wa.gov.au,gorgon-ncb.org.au,*.gorgon-ncb.org.au,lan.fyi,*.lan.fyi,perthzoo.wa.gov.au,*.perthzoo.wa.gov.au,bgpa.wa.gov.au,*.bgpa.wa.gov.au,dpaw.wa.gov.au,*.dpaw.wa.gov.au,perthzoo.com.au,*.perthzoo.com.au,*.bdr.wa.gov.au,*.bio.wa.gov.au,bdr.wa.gov.au,bio.wa.gov.au,*.kingsparkguides.org.au,kingsparkguides.org.au
     healthcheck:
-      test: ['CMD', 'certbot', '--help']
-      start_period: 5s
-      interval: 5s
-      timeout: 1s
+      test: ['CMD', 'certbot', '--version']
+      start_period: 15s
+      interval: 30s
+      timeout: 3s
       retries: 3
-    entrypoint: ["tail", "-f", "/dev/null"]
-  certbot-azure:
-    image: ghcr.io/dbca-wa/certbot-dns-multi
-    volumes:
-      - /var/nginx-etc/letsencrypt:/etc/letsencrypt
-      - /var/nginx-etc/letsencrypt/secrets/azure.ini:/secrets/azure.ini
-      - letsencrypt-log:/var/log/letsencrypt
-    environment:
-      - TZ=Australia/Perth
-      - EMAIL=asi@dbca.wa.gov.au
-      - DOMAINS=rottnestisland.com,*.rottnestisland.com
-    healthcheck:
-      test: ['CMD', 'certbot', '--help']
-      start_period: 5s
-      interval: 5s
-      timeout: 1s
-      retries: 3
-    entrypoint: ["tail", "-f", "/dev/null"]
   fluentd:
     image: fluentd:v1.19-debian-1
     ports:
-      - 24224:24224
+      - 24220:24220
+    user: root
+    entrypoint: ["/bin/bash", "-c"]
+    command: ["mkdir -p /var/run/fluentd && rm -rf /var/run/fluentd/fluentd.sock && tini -- /bin/entrypoint.sh fluentd"]
     volumes:
-      - /var/nginx-etc/fluentd:/fluentd/etc
+      - /var/nginx-etc/fluentd:/fluentd/etc:ro
       - fluentd-log:/fluentd/log
+      - /var/run:/var/run
     environment:
       - TZ=Australia/Perth
     healthcheck:
-      test: ['CMD', 'fluentd', '--dry-run', '-c', '/fluentd/etc/fluent.conf']
+      test: ['CMD', 'fluentd', '--dry-run', '-c', '/fluentd/etc/fluentd.conf']
       start_period: 5s
       interval: 5s
       timeout: 1s
