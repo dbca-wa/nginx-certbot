@@ -25,7 +25,6 @@ services:
       - /var/nginx-etc/letsencrypt:/etc/letsencrypt
       - /var/nginx-etc/nginx:/etc/nginx:ro
       - nginx-process:/var/run
-      - /var/run/fluentd:/var/run/fluentd
     environment:
       - TZ=Australia/Perth
     logging:
@@ -67,14 +66,14 @@ services:
   fluentd:
     image: fluentd:v1.19-debian-1
     ports:
-      - 24220:24220
-    user: root
-    entrypoint: ["/bin/bash", "-c"]
-    command: ["mkdir -p /var/run/fluentd && rm -rf /var/run/fluentd/fluentd.sock && tini -- /bin/entrypoint.sh fluentd"]
+      - mode: host
+        protocol: tcp
+        published: 24220
+        target: 24220
     volumes:
       - /var/nginx-etc/fluentd:/fluentd/etc:ro
       - fluentd-log:/fluentd/log
-      - /var/run:/var/run
+      - /var/run/fluentd:/var/run/fluentd
     environment:
       - TZ=Australia/Perth
     healthcheck:
