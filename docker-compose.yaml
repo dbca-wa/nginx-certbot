@@ -30,7 +30,8 @@ services:
     logging:
       driver: fluentd
       options:
-        fluentd-address: 'localhost:24224'
+        fluentd-address: 'unix:///var/run/fluentd/fluentd.sock'
+        mode: 'non-blocking'
         tag: 'nginx.access'
   sigsci:
     image: ghcr.io/dbca-wa/nginx-sigsci:1.30.4
@@ -65,10 +66,14 @@ services:
   fluentd:
     image: fluentd:v1.19-debian-1
     ports:
-      - 24224:24224
+      - mode: host
+        protocol: tcp
+        published: 24220
+        target: 24220
     volumes:
       - /var/nginx-etc/fluentd:/fluentd/etc:ro
       - fluentd-log:/fluentd/log
+      - /var/run/fluentd:/var/run/fluentd
     environment:
       - TZ=Australia/Perth
     healthcheck:
