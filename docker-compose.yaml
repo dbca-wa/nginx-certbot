@@ -1,6 +1,6 @@
 services:
   nginx:
-    image: ghcr.io/dbca-wa/nginx-sigsci:1.30.4
+    image: ghcr.io/dbca-wa/nginx-sigsci:1.30.6
     ports:
       - mode: host
         protocol: tcp
@@ -34,8 +34,8 @@ services:
         mode: 'non-blocking'
         tag: 'nginx.access'
   sigsci:
-    image: ghcr.io/dbca-wa/nginx-sigsci:1.30.4
-    # https://docs.fastly.com/en/ngwaf/installing-the-agent#start-the-agent
+    image: ghcr.io/dbca-wa/nginx-sigsci:1.30.6
+    # https://www.fastly.com/documentation/guides/next-gen-waf/agent-management/installing-the-agent/#start-the-agent
     command: sigsci-agent --log-out=stdout
     volumes:
       - /var/nginx-etc/sigsci:/etc/sigsci
